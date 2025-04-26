@@ -6,23 +6,23 @@ namespace Aula02.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ClienteController : Controller
+    public class PedidoController : Controller
     {
-        private readonly IClienteService _clienteService;
+        private readonly IPedidoService _pedidoService;
 
-        public ClienteController(IClienteService clienteService) 
+        public PedidoController(IPedidoService pedidoService)
         {
-            _clienteService = clienteService;
+            _pedidoService = pedidoService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> RetornaTodosClientes() 
+        public async Task<ActionResult<IEnumerable<Pedido>>> RetornaTodosPedidos()
         {
             try
             {
-                IEnumerable<Cliente> clientes = await _clienteService.RetornaTodosClientesAsync();
+                IEnumerable<Pedido> pedidos = await _pedidoService.RetornaTodosPedidosAsync();
 
-                return Ok(clientes);
+                return Ok(pedidos);
             }
             catch (Exception ex)
             {
@@ -31,16 +31,16 @@ namespace Aula02.Controllers
         }
 
         [HttpGet("{pId}")]
-        public async Task<ActionResult<Cliente>> RetornaCliente(int pId) 
+        public async Task<ActionResult<Pedido>> RetornaPedido(int pId)
         {
             try
             {
-                Cliente cliente = await _clienteService.RetornaClientePorIdAsync(pId);
+                Pedido pedido = await _pedidoService.RetornaPedidoPorIdAsync(pId);
 
-                if (cliente == null)
+                if (pedido == null)
                     return NotFound();
 
-                return Ok(cliente);
+                return Ok(pedido);
             }
             catch (Exception ex)
             {
@@ -49,13 +49,13 @@ namespace Aula02.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> CriarCliente([FromBody] Cliente pCliente) 
+        public async Task<ActionResult<Pedido>> CriarPedido([FromBody] Pedido pPedido)
         {
             try
             {
-                Cliente novoCliente = await _clienteService.CriarCliente(pCliente);
+                Pedido novoPedido = await _pedidoService.CriarPedido(pPedido);
 
-                return CreatedAtAction(nameof(RetornaCliente), new { pId = novoCliente.Id }, novoCliente);
+                return CreatedAtAction(nameof(RetornaPedido), new { pId = novoPedido.Id }, novoPedido);
             }
             catch (Exception ex)
             {
@@ -64,14 +64,14 @@ namespace Aula02.Controllers
         }
 
         [HttpPut("{pId}")]
-        public async Task<IActionResult> AtualizaCliente(int pId, [FromBody] Cliente pCliente) 
+        public async Task<IActionResult> AtualizaPedido(int pId, [FromBody] Pedido pPedido)
         {
             try
             {
-                if (pId != pCliente.Id)
+                if (pId != pPedido.Id)
                     return BadRequest();
 
-                bool atualizado = await _clienteService.AtualizarCliente(pCliente);
+                bool atualizado = await _pedidoService.AtualizarPedido(pPedido);
 
                 if (!atualizado)
                     return NotFound();
@@ -85,11 +85,11 @@ namespace Aula02.Controllers
         }
 
         [HttpDelete("{pId}")]
-        public async Task<IActionResult> Delete(int pId) 
+        public async Task<IActionResult> Delete(int pId)
         {
             try
             {
-                bool excluido = await _clienteService.ExcluirCliente(pId);
+                bool excluido = await _pedidoService.ExcluirPedido(pId);
 
                 if (!excluido)
                     return NotFound();

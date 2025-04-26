@@ -16,7 +16,7 @@ namespace Aula02.Infraestrutura.Repositories
 
         public async Task AtualizarClienteAsync(Cliente pCliente)
         {
-            _context.Entry(pCliente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(pCliente).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
         }
